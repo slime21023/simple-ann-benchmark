@@ -33,7 +33,7 @@ del index
 
 # Run the Benchmark
 
-tree_nums = [1, 10, 30, 50, 70, 90, 110, 130]
+tree_nums = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 # tree_nums = [1, 10, 30]
 build_time=[]
 result = []

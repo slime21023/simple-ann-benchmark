@@ -7,7 +7,7 @@ import faiss
 
 faiss.omp_set_num_threads(8)
 
-gist = np.load("dataset/gist-960-euclidean.npy")
+gist = np.load("dataset/half-gist-960-euclidean.npy")
 print(f'gist data shape: {gist.shape}')
 
 index = AnnoyIndex(f=gist.shape[1], metric='euclidean')
