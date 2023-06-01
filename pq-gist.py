@@ -6,7 +6,7 @@ import faiss
 
 faiss.omp_set_num_threads(8)
 
-gist = np.load("dataset/gist-960-euclidean.npy")
+gist = np.load("dataset/half-gist-960-euclidean.npy")
 print(f'gist data shape: {gist.shape}')
 
 
@@ -15,7 +15,7 @@ print(f'gist data shape: {gist.shape}')
 d = gist.shape[1]
 
 m = 16
-nbits = 9
+nbits = 3
 PQ = faiss.IndexPQ(d, m, nbits)
 print(PQ.is_trained)
 PQ.train(gist)
@@ -37,8 +37,7 @@ del PQ
 
 
 # Run the Benchmark
-
-bits = [3, 4, 5, 6, 7, 8, 9]
+bits = [1, 2, 3, 4, 5, 6, 7, 8]
 build_time=[]
 result=[]
 
@@ -49,7 +48,8 @@ def build_index(data, n_bits, m=16):
     return index
 
 def recall(pred, true):
-    return sum([1 for i in pred if i in true]) / true.size
+    x = np.isin(pred, true)
+    return x.sum() / true.size
 
 
 def benchmark_knn_query(data, index, size=1000, k=100):
@@ -69,6 +69,7 @@ def benchmark_knn_query(data, index, size=1000, k=100):
 
 
 for n_bits in bits:
+    print(f'n_bits: {n_bits}')
     start = time.time()
     index = build_index(gist, n_bits=n_bits)
     btime = time.time() - start

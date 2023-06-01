@@ -15,7 +15,7 @@ index = AnnoyIndex(f=gist.shape[1], metric='euclidean')
 for i in range(gist.shape[0]):
     index.add_item(i, vector=gist[i, :])
 
-index.build(n_trees=100)
+index.build(n_trees=10)
 
 I = index.get_nns_by_vector(vector=gist[0], n=100)
 print(f'index query: {I}')
@@ -34,7 +34,7 @@ del index
 # Run the Benchmark
 
 # tree_nums = [1, 10, 30, 50, 70, 90, 110, 130]
-tree_nums = [1]
+tree_nums = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 build_time=[]
 result = []
 
@@ -47,7 +47,8 @@ def build_index(data, n_trees, metric='euclidean'):
     return index
 
 def recall(pred, true):
-    return sum([1 for i in pred if i in true]) / true.size
+    x = np.isin(pred, true)
+    return x.sum() / true.size
 
 def benchmark_knn_query(data, index, size=1000, k=100):
     indices = np.random.choice(data.shape[0], size, replace=False)

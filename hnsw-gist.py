@@ -6,7 +6,7 @@ import faiss
 
 faiss.omp_set_num_threads(8)
 
-gist = np.load("dataset/gist-960-euclidean.npy")
+gist = np.load("dataset/half-gist-960-euclidean.npy")
 print(f'gist data shape: {gist.shape}')
 
 
@@ -35,7 +35,7 @@ del HNSW
 
 # Run the Benchmark
 
-M = [ 16, 24, 32, 48, 64, 128, 256]
+M = [ 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128]
 result = []
 build_time=[]
 
@@ -46,7 +46,8 @@ def build_index(data, M):
     return index
 
 def recall(pred, true):
-    return sum([1 for i in pred if i in true]) / true.size
+    x = np.isin(pred, true)
+    return x.sum() / true.size
 
 def benchmark_knn_query(data, index, size=1000, k=100):
 
@@ -65,6 +66,7 @@ def benchmark_knn_query(data, index, size=1000, k=100):
     result.append((query_time/1000, cur_recall/1000))
 
 for m in M:
+    print(f'm : {m}')
     start = time.time()
     index = build_index(gist, M=m)
     btime = time.time() - start
