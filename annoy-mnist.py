@@ -47,7 +47,8 @@ def build_index(data, n_trees, metric='euclidean'):
     return index
 
 def recall(pred, true):
-    return sum([1 for i in pred if i in true]) / true.size
+    x = np.isin(pred, true)
+    return x.sum() / true.size
 
 def benchmark_knn_query(data, index, size=1000, k=100):
     indices = np.random.choice(data.shape[0], size, replace=False)

@@ -48,7 +48,8 @@ def build_index(data, n_bits):
     return index
 
 def recall(pred, true):
-    return sum([1 for i in pred if i in true]) / true.size
+    x = np.isin(pred, true)
+    return x.sum() / true.size
 
 
 def benchmark_knn_query(data, index, size=1000, k=100):
